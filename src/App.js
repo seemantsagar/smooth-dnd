@@ -8,9 +8,8 @@ const HEIGHT = 80;
 
 function App() {
   var MAX = 5;
-  console.log("max", MAX);
-  var items = range(MAX);
-  
+  var ITEMS = range(MAX);
+  const [items, setItems] = useState(ITEMS);
   const [state, setState] = useState({
     order: items,
     dragOrder: items,
@@ -18,24 +17,13 @@ function App() {
     id : null
   });
   const getDustbinCoordinates = () => {
-    console.log(state);
-
     var index = items.indexOf(state.id);
     if (index > -1) {
     items.splice(index, 1);
     MAX--;
-    
+    console.log(items);
     }
-    //items.splice(state.id, 1)
-    //console.log(items);
   }
-//   if (state.id){
-//   setState(state => ({
-//     ...state,
-//   dragOrder: state.dragOrder.splice(state.id, 1)
-// }));
-// }
-//console.log(state);
   const handleDrag = useCallback(({translation, id}) => {
     const delta = Math.round(translation.y / HEIGHT);
     const index = state.order.indexOf(id);
@@ -45,27 +33,10 @@ function App() {
       return;
     }
     dragOrder.splice(index + delta, 0, id);
-    
-    // var last = dragOrder.splice(-1, 1);
-     //console.log(id);
-     
-    //  var arr = items;
-    //  console.log(arr);
-    //   arr = arr.splice(id, id);
-    //  console.log(arr);
-    // setState(state => ({
-    //   ...state,
-    //   draggedIndex: id,
-    //   dragOrder: 
-    // }));
-    
-    
-    //console.log(dragOrder);
     setState(state => ({
       ...state,
       draggedIndex: id,
       id : id,
-      //order : state.order.splice(state.id, 1),
       dragOrder
     }));
   }, [state.order, items.length]);
@@ -76,9 +47,8 @@ function App() {
       order: state.dragOrder,
       draggedIndex: null
     }));
-    //console.log(state.dragOrder);
-    
-
+    console.log(items);
+    console.log(state.order);
   }, []);
 
   return (
@@ -105,7 +75,7 @@ function App() {
         );
       })}
     </Container>
-    <div onMouseOver={getDustbinCoordinates} id= "dustbin" className="dustbin-icon"></div>
+    <div onMouseOver={() => getDustbinCoordinates()} id= "dustbin" className="dustbin-icon"></div>
     </div>
   );
 }
